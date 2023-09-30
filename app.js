@@ -1,12 +1,11 @@
- const express = require('express');
- const app = express();
- const PORT = 3000;
- const routes = require('./src/routes/user.routes')
+import Express from 'express';
+const app = Express();
+const PORT = 3000;
+import { userRoute } from './src/routes/user.routes.js'
 
 // Routes --- 
 
-app.use(routes)
-
+app.use(userRoute());
 
 app.listen(PORT, () => { console.log(`Escuchando puerto ${PORT}`) });
  
