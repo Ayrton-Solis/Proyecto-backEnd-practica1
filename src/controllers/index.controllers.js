@@ -1,10 +1,11 @@
-import Express from "express";
-const app = Express();
+export const mensajeHomeUno = (req, res) => {
 
+  res.send('Mensaje para el home 1')
 
+};
 
-export function controller() {
-  app.get((req, res) => {
-    res.send('La conexion desde el router utilizando controller e import es correcta')
-  });
+export const mensajeHomeDos = (req, res) => {
+
+  res.send('Mensaje para el home 2')
+
 }

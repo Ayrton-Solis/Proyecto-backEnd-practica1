@@ -1,10 +1,15 @@
 import Express from 'express';
-import { controller } from '../controllers/index.controllers.js';
-const router = Express.Router();
+import { user } from '../controllers/user.controllers.js';
+
+const userRoute = Express.Router();
 
 
-export function userRoute() {
+//  ---- user routs ---- 
+userRoute.get('/user', );
 
-  router.get('/', controller());
+//  ---- user id routs ----
+userRoute.get('/user:id', user.show);
+userRoute.post('/user:id', user.saveData);
 
-}; 
+
+export default userRoute;
