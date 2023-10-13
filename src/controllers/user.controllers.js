@@ -1,5 +1,6 @@
-import { log } from 'console';
 import fs from 'fs/promises';
+// ruta de la base de datos
+const routDatabase = './database.txt';
 
 export class user {
 
@@ -15,7 +16,7 @@ export class user {
     users.push(newUser);
     // Guardar el usuario nuevo a la base de datos
     try {
-      await fs.writeFile('./database.txt', JSON.stringify(users))
+      await fs.writeFile(routDatabase, JSON.stringify(users))
     }catch (error) { // Manejo del error
       console.log(error);
     }
@@ -25,7 +26,7 @@ export class user {
   static async getAll(){
     // Obtener los usuario de la database
     try {
-      const users = await fs.readFile('./database.txt', 'utf-8')
+      const users = await fs.readFile(routDatabase, 'utf-8')
       return JSON.parse(users);
     }catch (error) { // Manejo del error
       console.log(error); 
@@ -33,13 +34,14 @@ export class user {
   };
 
   static async show(req, res){
-    // Obtener todos los usuarios
     try {
-      const array = await fs.readFile('./database.txt', 'utf-8');
-      const users = JSON.parse(array); 
+      // Obtener todos los usuarios
+      const array = await fs.readFile(routDatabase, 'utf-8');
+      // JSON.parse para mostrar en console.log y JSON.stringify para mostrarlo por res.send
+      const users = JSON.parse(array);
       // Saludar a todos los usuarios uno por uno
       res.send(`Buenas tardes ${users}`)
-      users.forEach(user => {console.log( `Hola señor/a ${ user.name + ' ' + user.lastName }`)});
+      users.forEach(user => {console.log( `Hola señor/a ${ user.name + ' ' + user.lastName}`)});
     }catch (error) {
       console.log(error);
     };
