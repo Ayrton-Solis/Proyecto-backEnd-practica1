@@ -1,15 +1,16 @@
 import Express from 'express';
-import { user } from '../controllers/user.controllers.js';
+import { users } from '../controllers/user.controllers.js';
 
 const userRoute = Express.Router();
 
 
-//  ---- user routs ---- 
-userRoute.get('/user', );
+//  ---- user routs ----
+userRoute.get('/user', users.getUsers);
+userRoute.post('/user', users.createUsers);
 
-//  ---- user id routs ----
-userRoute.get('/user:id', user.show);
-userRoute.post('/user:id', user.saveData);
-
+// ---- userById routs ----
+userRoute.get('/user/:id', users.getUserById);
+userRoute.delete('/user/:id', users.deleteUserById);
+userRoute.put('/user/:id', users.updateUserById);
 
 export default userRoute;

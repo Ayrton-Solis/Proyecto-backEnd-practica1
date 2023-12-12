@@ -1,47 +1,68 @@
-import fs from 'fs/promises';
-// ruta de la base de datos
-const routDatabase = './database.txt';
+// Importa que la desestructuracion sea de esta manera porque sino da error por alguna razon desconocida.
+import pkg from "pg";
 
-export class user {
+const { Pool } = pkg;
 
-  static async saveData(req, res){
-    // Obtener los usuarios de la database
-    const users = await user.getAll();
-    // Creacion del nuevo usuario
-    const newUser = {
-      name: req.body.name,
-      lastName: req.body.lastName
-    };
-    // Ingresar el usuario al array
-    users.push(newUser);
-    // Guardar el usuario nuevo a la base de datos
+const pool = new Pool({
+  host: 'localhost',
+  user: 'postgres',
+  password: 'Nezuko23',
+  database: 'firstapi',
+  port: '5432'
+});
+
+export class users {
+
+  static async getUsers(req, res) {
     try {
-      await fs.writeFile(routDatabase, JSON.stringify(users))
-    }catch (error) { // Manejo del error
+      const response = await pool.query('select * from users');
+      console.log(response.rows);
+      res.json(response.rows);
+    }catch (error) {
       console.log(error);
-    }
-    users.forEach(user => { res.send(`hola señor/a ${ user.name + ' ' + user.lastName }`) });
-  };
-
-  static async getAll(){
-    // Obtener los usuario de la database
-    try {
-      const users = await fs.readFile(routDatabase, 'utf-8')
-      return JSON.parse(users);
-    }catch (error) { // Manejo del error
-      console.log(error); 
     };
   };
 
-  static async show(req, res){
+  static async createUsers(req, res) {
     try {
-      // Obtener todos los usuarios
-      const array = await fs.readFile(routDatabase, 'utf-8');
-      // JSON.parse para mostrar en console.log y JSON.stringify para mostrarlo por res.send
-      const users = JSON.parse(array);
-      // Saludar a todos los usuarios uno por uno
-      res.send(`Buenas tardes ${users}`)
-      users.forEach(user => {console.log( `Hola señor/a ${ user.name + ' ' + user.lastName}`)});
+      const { name, email } = req.body;
+      const response = await pool.query('insert into users (name, email) values ($1, $2)', [name, email]);
+      console.log(response);
+      res.send('User Created');
+    }catch (error) {
+      console.log(error);
+    };
+  };
+
+  static async getUserById(req, res) {
+    try {
+      const id = req.params.id;
+      const response = await pool.query('select * from users where id = $1', [id]);
+      console.log(response.rows);
+      res.send(response.rows);
+    }catch (error) {
+      console.log(error);
+    };
+  };
+
+  static async deleteUserById(req, res) {
+    try {
+      const id = req.params.id;
+      const response = await pool.query('delete from users where id = $1', [id]);
+      console.log(response);
+      res.send(`Usuario con id ${id} eliminado correctamente`);
+    }catch (error) {
+      console.log(error);
+    };
+  };
+
+  static async updateUserById(req, res) {
+    try {
+      const id = req.params.id;
+      const { name, email } = req.body;
+      const response = await pool.query('update users set name = $1, email = $2 where id = $3', [name, email, id]);
+      console.log(response);
+      res.send('Usuario actualizado correctamente');
     }catch (error) {
       console.log(error);
     };

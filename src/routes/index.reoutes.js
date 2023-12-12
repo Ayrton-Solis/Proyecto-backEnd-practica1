@@ -6,7 +6,7 @@ const indexRoute = Express.Router();
 
 
 indexRoute.get('/', mensajeHomeUno);
-indexRoute.get('/home', mensajeHomeDos);
+indexRoute.get('/2doHome', mensajeHomeDos);
 
 
 export default indexRoute;
